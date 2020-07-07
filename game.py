@@ -1,5 +1,7 @@
 # Import the pygame library and initialise the game engine
 import pygame
+# Let's import the Paddle Class
+from paddle import Paddle
 
 pygame.init()
 
@@ -19,6 +21,17 @@ size = (800, 600)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Breakout Game")
 
+# This will be a list that will contain all the sprites we intend to use in our game.
+all_sprites_list = pygame.sprite.Group()
+
+# Create the Paddle
+paddle = Paddle(LIGHTBLUE, 100, 10)
+paddle.rect.x = 350
+paddle.rect.y = 560
+
+# Add the paddle to the list of sprites
+all_sprites_list.add(paddle)
+
 # The loop will carry on until the user exit the game (e.g. clicks the close button).
 carryOn = True
 
@@ -33,9 +46,10 @@ while carryOn:
             carryOn = False  # Flag that we are done so we exit this loop
 
     # --- Game logic should go here
+    all_sprites_list.update()
 
     # --- Drawing code should go here
-    # First, clear the screen to dark blue. 
+    # First, clear the screen to dark blue.
     screen.fill(DARKBLUE)
     pygame.draw.line(screen, WHITE, [0, 38], [800, 38], 2)
 
@@ -45,6 +59,9 @@ while carryOn:
     screen.blit(text, (20, 10))
     text = font.render("Lives: " + str(lives), 1, WHITE)
     screen.blit(text, (650, 10))
+
+    # Now let's draw all the sprites in one go. (For now we only have 2 sprites!)
+    all_sprites_list.draw(screen)
 
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
